@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="Z_SECOND_SRV" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <Annotation Term="Core.SchemaVersion" String="1.0.0" xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+            <EntityType Name="Product" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PRODUCT_ID"/>
+                </Key>
+                <Property Name="PRODUCT_ID" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="TYPE_CODE" Type="Edm.String" Nullable="false" sap:unicode="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CATEGORY" Type="Edm.String" Nullable="false" sap:unicode="false" sap:sortable="false"/>
+                <Property Name="NAME" Type="Edm.String" Nullable="false" sap:unicode="false" sap:filterable="false"/>
+                <Property Name="DESCRIPTION" Type="Edm.String" Nullable="false" sap:unicode="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="SUPPLIER_ID" Type="Edm.String" Nullable="false" sap:unicode="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="SUPPLIER_NAME" Type="Edm.String" Nullable="false" sap:unicode="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PRICE" Type="Edm.Decimal" Nullable="false" Precision="10" Scale="2" sap:unicode="false" sap:unit="CURRENCY_CODE" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CURRENCY_CODE" Type="Edm.String" sap:unicode="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="DIM_UNIT" Type="Edm.String" Nullable="false" sap:unicode="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="To_Supplier" Relationship="Z_SECOND_SRV.Product_Supplier" FromRole="FromRole_Product_Supplier" ToRole="ToRole_Product_Supplier"/>
+            </EntityType>
+            <EntityType Name="Supplier" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="BP_ID"/>
+                </Key>
+                <Property Name="BP_ID" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="BP_ROLE" Type="Edm.String" Nullable="false" sap:unicode="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="EMAIL_ADDRESS" Type="Edm.String" Nullable="false" sap:unicode="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="PHONE_NUMBER" Type="Edm.String" Nullable="false" sap:unicode="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="WEB_ADDRESS" Type="Edm.String" Nullable="false" sap:unicode="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="COMPANY_NAME" Type="Edm.String" Nullable="false" sap:unicode="false" sap:sortable="false"/>
+                <Property Name="CURRENCY_CODE" Type="Edm.String" sap:unicode="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="CITY" Type="Edm.String" Nullable="false" sap:unicode="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="BUILDING" Type="Edm.String" sap:unicode="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="COUNTRY" Type="Edm.String" sap:unicode="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <Association Name="Product_Supplier" sap:content-version="1">
+                <End Type="Z_SECOND_SRV.Product" Multiplicity="1" Role="FromRole_Product_Supplier"/>
+                <End Type="Z_SECOND_SRV.Supplier" Multiplicity="1" Role="ToRole_Product_Supplier"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_Product_Supplier">
+                        <PropertyRef Name="PRODUCT_ID"/>
+                    </Principal>
+                    <Dependent Role="ToRole_Product_Supplier">
+                        <PropertyRef Name="BP_ID"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="Z_SECOND_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="ProductSet" EntityType="Z_SECOND_SRV.Product" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="SupplierSet" EntityType="Z_SECOND_SRV.Supplier" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <AssociationSet Name="Product_SupplierSet" Association="Z_SECOND_SRV.Product_Supplier" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="ProductSet" Role="FromRole_Product_Supplier"/>
+                    <End EntitySet="SupplierSet" Role="ToRole_Product_Supplier"/>
+                </AssociationSet>
+                <FunctionImport Name="GetMostExpensiveProduct" ReturnType="Z_SECOND_SRV.Product" EntitySet="ProductSet" m:HttpMethod="GET">
+                    <Parameter Name="I_CATEGORY" Type="Edm.String" Mode="In"/>
+                </FunctionImport>
+            </EntityContainer>
+            <atom:link rel="self" href="http://anubhavtrainings.server.com:8030/sap/opu/odata/sap/Z_SECOND_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="http://anubhavtrainings.server.com:8030/sap/opu/odata/sap/Z_SECOND_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
